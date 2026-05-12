@@ -1,0 +1,82 @@
+# Format checks enforced on CI:
+# 1. Comments must appear above each field.
+# 2. There must be a blank line between each field.
+# 3. Inline comments (after a field on the same line) are not allowed.
+# 4. Indentation level is respected for nested fields.
+
+# defaults specify the default config from each component
+defaults:
+
+  # fsdp optimizer config
+  - ../optim@optim: fsdp
+
+  # fsdp engine config
+  - ../engine@fsdp_config: fsdp
+
+  # dp actor config, inheriting from trainer/config/actor/actor.yaml
+  - actor
+
+  # load the reference default config, then apply the fields in the current yaml
+  - _self_
+
+# Target class for this configuration
+_target_: verl.workers.config.FSDPActorConfig
+
+# TODO(haibin.lin): switch to fsdp2
+strategy: fsdp
+
+# Gradient clipping for actor updates, specific to the strategy.
+grad_clip: 1.0
+
+# Sequence parallelism size for Ulysses-style model parallelism
+# oc.select: the default val for ref.ulysses_sequence_parallel_size
+# [DEPRECATED] use fsdp_config.ulysses_sequence_parallel_size instead
+ulysses_sequence_parallel_size: 1
+
+# calculate entropy with chunking to reduce memory peak
+entropy_from_logits_with_chunking: False
+
+# recompute entropy
+entropy_checkpointing: False
+
+# Whether to remove padding tokens in inputs during training
+use_remove_padding: ${oc.select:actor_rollout_ref.model.use_remove_padding,false}
+
+# This computes Σπ² needed for the Logit-Gradient Norm proxy W(τ) = Σ_t[1 - 2π_t + Σπ²]
+# c.f. https://yingru.notion.site/The-Optimal-Token-Baseline-399211a558b782cfa936014c0d42dfb8
+calculate_sum_pi_squared: False
+
+# Enable gradient checkpointing for sum_pi_squared computation (saves memory)
+sum_pi_squared_checkpointing: False
+
+# CoT (Chain-of-Thought) masking configuration
+# Enable structural CoT masking during training (blocks answer→prompt attention)
+use_cot_masking: False
+
+# Token ID for <think> tag
+think_token_id: 151665
+
+# Token ID for </think> tag
+end_think_token_id: 151666
+
+# Disable CoT masking for old_log_prob computation (importance sampling denominator)
+# When True: old_log_prob uses unmasked attention even if actor uses masking
+# When False: old_log_prob uses same masking as actor (default)
+disable_cot_masking_for_old_log_prob: False
+
+# Whether to enable CoT parameter gradient masking (Figure 3b intervention)
+# When enabled, only CoT tokens contribute to parameter updates
+use_cot_gradient_masking: false
+
+# Whether to block gradients from prompt tokens to model parameters
+# Only effective when use_cot_gradient_masking is true
+block_prompt_gradients: true
+
+# Whether to block gradients from answer tokens to model parameters
+# Only effective when use_cot_gradient_masking is true
+block_answer_gradients: true
+
+# Whether to enable attention gradient masking (answer→prompt gradient blocking)
+# When enabled, gradients cannot flow from answer tokens to prompt tokens through attention
+# This is independent from use_cot_gradient_masking and can be used alone
+use_attention_gradient_masking: false

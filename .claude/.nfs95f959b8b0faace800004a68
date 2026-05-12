@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(source:*)",
+      "Bash(conda activate:*)",
+      "Bash(python -c:*)",
+      "Bash(ls:*)",
+      "Bash(chmod:*)",
+      "Bash(lsof:*)",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(/workspace-vast/jinghanj/miniconda3/envs/verl2/bin/python:*)",
+      "Bash(conda env:*)",
+      "Bash(python:*)",
+      "Bash(timeout 5 tail:*)",
+      "Bash(grep:*)",
+      "Bash(python3:*)",
+      "Bash(/workspace-vast/jinghanj/miniconda3/envs/verl/bin/python:*)",
+      "Bash(/workspace-vast/jinghanj/miniconda3/envs/verl2/bin/python3:*)",
+      "Bash(done)",
+      "Bash(conda run:*)",
+      "Bash(find /workspace-vast/jinghanj/workspace/Structural_RL_dev -maxdepth 3 -name \"plot_faithful*.py\" 2>/dev/null | sort\nfind /workspace-vast/jinghanj/workspace/Structural_RL_dev/results -maxdepth 1 -type d 2>/dev/null | head)",
+      "Bash(cat /workspace-vast/pretrained_ckpts/hub/models--Qwen--Qwen2.5-Math-7B-Instruct/snapshots/*/config.json)",
+      "WebSearch",
+      "Bash(sbatch scripts/train_dapo_math/submit_dapo_math_training.sbatch vanilla)",
+      "Bash(sbatch:*)",
+      "Bash(wc -l find /workspace-vast/jinghanj/workspace/Structural_RL_dev/results/qwen25-7b-dapo-math-cot_gradient*/checkpoint* -name dapo_math_*_analysis.json)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); examples=data if isinstance\\(data, list\\) else data.get\\(''''examples'''', data.get\\(''''generations'''', []\\)\\); [print\\(''''---''''\\); print\\(repr\\(e.get\\(''''response'''',''''''''\\)[:500]\\)\\) for e in examples[:3]]\")",
+      "Bash(python3 -c \":*)",
+      "Bash(/dev/null echo:*)",
+      "Bash(bash scripts/eval/submit_dapo_math_hint_evals_vanilla.sh --dry-run)",
+      "Bash(sort -t_ -k3 -n)",
+      "Bash(head -10 find /workspace-vast/jinghanj/workspace/Structural_RL_dev/results/qwen25-7b-dapo-math-cot_gradient-v2_strong-lr1e-6-len10k-nopenalty-bs512-seed1997 -name *aime*passk*.json)",
+      "Bash(cp:*)",
+      "Bash(sort -t p -k2 -n)"
+    ]
+  }
+}
